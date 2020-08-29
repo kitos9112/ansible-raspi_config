@@ -10,12 +10,18 @@ raspi_config_memory_split_gpu: 16
 raspi_config_ensure_optimal_cpu_params: true
 # set global locale
 raspi_config_locale: en_US.UTF-8
+# set the world country for WiFi
+raspi_config_wifi_country: GB
 # set timezone
 raspi_config_timezone: UTC
 # list of services that should be restarted if the timezone is changed
 raspi_config_timezone_dependent_services: []
 # set hostname
-raspi_config_hostname: pi
+raspi_config_hostname: pi.local
+# set short hostname
+raspi_config_hostname_short: "{{ raspi_config_hostname.split('.')[0] }}"
+# hash table of hosts to update /etc/hosts
+raspi_config_dns_hosts: {}
 # ensure camera support is on - CURRENTLY UNVERIFIED
 raspi_config_enable_camera: false
 # specify whether to fail deployment when user/password is default

@@ -1,0 +1,13 @@
+---
+
+- name: Update RPi hostname
+  hostname: 
+    name: "{{ raspi_config_hostname }}"
+
+- name: Manage /etc/hosts entries
+  template:
+    src: hosts.j2
+    dest: /etc/hosts
+    owner: root
+    group: root
+    mode: '0644'

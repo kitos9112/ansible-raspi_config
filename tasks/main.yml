@@ -1,10 +1,13 @@
 ---
 
-- name: update all packages
+- name: Update, Upggrade and autoclean all packages
   apt:
     update_cache: true
-    upgrade: dist
-  when: raspi_config_update_packages
+    autoclean: yes
+    upgrade: full
+  when: raspi_config_update_packages |bool
+
+- import_tasks: hostname.yml
 
 - name: sets the timezone
   timezone:
@@ -25,7 +28,37 @@
   debug:
     msg: "{{ expand_fs_output.stderr }}"
   when: "raspi_config_expanded_filesystem and expand_fs_output.stderr.startswith('WARN')"
-  changed_when: "True"      # for highlighting purposes
+
+- name: Get WiFi country [RPi-4B+ only]
+  shell: "raspi-config nonint get_wifi_country"
+  register: wifi_country
+  changed_when: wifi_country.stdout != raspi_config_wifi_country
+  when:
+    - inventory_hostname in groups['raspberry_pi_4b']
+
+- name: Set WiFi country [RPi-4B+ only]
+  shell: "raspi-config nonint do_wifi_country {{ raspi_config_wifi_country }}"
+  when:
+    - inventory_hostname in groups['raspberry_pi_4b']
+    - wifi_country.stdout != raspi_config_wifi_country
+
+- name: Set WiFi country via `iw` [RPi-3B+ only]
+  shell: "iw reg set {{ raspi_config_wifi_country }}"
+  changed_when: False
+  when:
+    - inventory_hostname in groups['raspberry_pi_3b']
+
+- name: Get network names status
+  shell: "raspi-config nonint get_net_names"
+  register: pi_netnames
+  changed_when: False
+
+- name: Enable network names
+  shell: "raspi-config nonint do_net_names 0"
+  when: pi_netnames.stdout != '0'
+  notify:
+    - apply raspi-config
+    - reboot
 
 - name: ensure mem split
   pi_boot_config:
@@ -34,17 +67,6 @@
     - apply raspi-config
     - reboot
 
-- name: ensure correct CPU parameters for Pi2
-  ensure_pi2_oc:
-  args:
-    cpu_types: "{{ raspi_config_pi_cpu }}"
-  when: raspi_config_ensure_optimal_cpu_params
-  notify:
-    - apply raspi-config
-    - reboot
-
-- name: set camera state
-  import_tasks: camera.yml
 - name: set additional config vars
   pi_boot_config:
   args:

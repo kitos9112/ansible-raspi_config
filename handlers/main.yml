@@ -4,7 +4,7 @@
   command: raspi-config --apply-os-config
 
 - name: reboot
-  shell: "sleep 1 && shutdown -r now +1"
+  shell: "reboot -h now"
   async: 1
   poll: 0
   notify:

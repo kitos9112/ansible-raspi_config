@@ -1,0 +1,9 @@
+# BEGIN ANSIBLE MANAGED BLOCK hosts
+127.0.0.1     {{ raspi_config_hostname }}{% if raspi_config_hostname != raspi_config_hostname_short %} {{ raspi_config_hostname_short }}{% endif %} localhost
+::1           {{ raspi_config_hostname }}{% if raspi_config_hostname != raspi_config_hostname_short %} {{ raspi_config_hostname_short }}{% endif %} localhost ip6-localhost ip6-loopback
+ff02::1       ip6-allnodes
+ff02::2       ip6-allrouters
+{% for ip, domain in raspi_config_dns_hosts.items() %}
+{{ ip }}   {{ domain | join(' ') }}
+{% endfor %}
+# END ANSIBLE MANAGED BLOCK hosts
