@@ -1,0 +1,8 @@
+ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+update_config=1
+country={{ raspi_config_wifi_country }}
+
+network={
+ ssid="{{ raspi_config_wlan_ssid_name }}"
+ psk="{{ raspi_config_wlan_ssid_psk }}"
+}

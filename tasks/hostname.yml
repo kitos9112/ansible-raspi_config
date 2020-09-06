@@ -4,7 +4,7 @@
   hostname: 
     name: "{{ raspi_config_hostname }}"
 
-- name: Manage /etc/hosts entries
+- name: Manage /etc/hosts entries applying J2 template
   template:
     src: hosts.j2
     dest: /etc/hosts

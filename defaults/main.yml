@@ -21,7 +21,10 @@ raspi_config_hostname: pi.local
 # set short hostname
 raspi_config_hostname_short: "{{ raspi_config_hostname.split('.')[0] }}"
 # hash table of hosts to update /etc/hosts
+# e.g. - {10.10.10.50: [raspi1.domain.tld, raspi1] }
 raspi_config_dns_hosts: {}
+# NTP Server in LAN to server as stratum 2
+raspi_config_ntp_server: 10.10.10.1
 # ensure camera support is on - CURRENTLY UNVERIFIED
 raspi_config_enable_camera: false
 # specify whether to fail deployment when user/password is default
@@ -37,3 +40,7 @@ raspi_config_replace_user:
 raspi_config_reboot_max_wait_time: 300
 # use this to add any additional options to the config in raw form
 raspi_config_other_options: {}
+# WLAN SSID to fill wpa_supplicant.conf
+raspi_config_wlan_ssid_name: ""
+# WLAN PSK to fill wpa_supplicate.conf
+raspi_config_wlan_ssid_psk: ""

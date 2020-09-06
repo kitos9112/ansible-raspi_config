@@ -27,3 +27,8 @@
     name: "{{ item }}"
     state: restarted
   with_items: "{{ raspi_config_timezone_dependent_services }}"
+
+- name: Restart timesyncd service
+  service:
+    name: systemd-timesyncd
+    state: restarted
