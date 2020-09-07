@@ -5,6 +5,7 @@
     update_cache: true
     autoclean: yes
     upgrade: full
+  changed_when: false
   when: raspi_config_update_packages |bool
 
 - import_tasks: hostname.yml
