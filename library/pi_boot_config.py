@@ -8,7 +8,7 @@ from ansible.module_utils.basic import *
 # START - common module code - yay for copy-paste
 BOOT_CONFIG_PATH = "/boot/config.txt"
 
-RASPI_CONFIG_BIN = "/usr/bin/raspi-config"
+RASPI_CONFIG_BIN = "/usr/bin/raspi_config"
 
 
 class ConfigFile:

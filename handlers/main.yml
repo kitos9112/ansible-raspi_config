@@ -1,7 +1,7 @@
 ---
 
-- name: apply raspi-config
-  command: raspi-config --apply-os-config
+- name: apply raspi_config
+  command: raspi_config --apply-os-config
 
 - name: reboot
   shell: "reboot -h now"
@@ -32,3 +32,8 @@
   service:
     name: systemd-timesyncd
     state: restarted
+
+- name: restart networking
+  systemd:
+    name: 'networking'
+    state: 'restarted'
