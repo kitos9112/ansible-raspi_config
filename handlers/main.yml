@@ -1,7 +1,7 @@
 ---
 
 - name: apply raspi_config
-  command: raspi_config --apply-os-config
+  command: raspi-config --apply-os-config
 
 - name: reboot
   shell: "reboot -h now"
@@ -35,5 +35,5 @@
 
 - name: restart networking
   systemd:
-    name: 'networking'
-    state: 'restarted'
+    name: networking
+    state: restarted

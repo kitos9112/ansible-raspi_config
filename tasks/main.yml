@@ -8,7 +8,7 @@
   changed_when: false
   when: raspi_config_update_packages |bool
 
-- import_tasks: hostname.yml
+- import_tasks: hostname_network.yml
 
 - name: sets the timezone
   timezone:

@@ -44,3 +44,13 @@ raspi_config_other_options: {}
 raspi_config_wlan_ssid_name: ""
 # WLAN PSK to fill wpa_supplicate.conf
 raspi_config_wlan_ssid_psk: ""
+# IPv4 address for ETH0 for configuring static IP addressing
+raspi_config_dhcpd_eth0_ip_address: ""
+# IPv4 address for WLAN0 for configuring static IP addressing
+raspi_config_dhcpd_wlan0_ip_address: ""
+# IPv4 address for default gateway
+raspi_config_dhcpd_routers: ""
+# List of IPv4 address for configuring DNS name resolution
+raspi_config_dhcpd_domain_name_servers:
+  - 1.1.1.1
+  - 1.0.0.1
