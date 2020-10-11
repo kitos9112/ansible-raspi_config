@@ -37,3 +37,8 @@
   systemd:
     name: networking
     state: restarted
+
+- name: restart ntp
+  systemd:
+    name: ntp
+    state: restarted

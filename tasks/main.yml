@@ -1,4 +1,5 @@
 ---
+- import_tasks: time-ntpsync.yml
 
 - name: Update, Upggrade and autoclean all packages
   apt:
