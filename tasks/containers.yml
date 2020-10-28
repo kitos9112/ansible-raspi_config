@@ -1,0 +1,9 @@
+---
+- name: Enable container features in /boot/cmdline.txt
+  register: cmdline_results
+  replace:
+    path: /boot/cmdline.txt
+    regexp: '^([\w](?!.*\b{{ item }}\b).*)$'
+    replace: '\1 {{ item }}'
+  loop: "{{ raspi_config_cmdline_containers }}"
+  notify: reboot

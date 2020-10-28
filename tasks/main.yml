@@ -68,3 +68,7 @@
   notify:
     - apply raspi_config
     - reboot
+
+- name: Configure special needs for Containers
+  include_tasks: containers.yml
+  when: raspi_config_enable_cgroups |bool

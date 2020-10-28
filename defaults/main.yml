@@ -58,3 +58,12 @@ raspi_config_dhcpd_domain_name_servers:
   - 1.0.0.1
 # Empty string to identify an NTP area [0-4].<AREA>.ntp.org
 raspi_config_ntp_area: ""
+# Toggle to control when to modify cmdline.txt to ensure fully cgroups compatbility
+raspi_config_enable_cgroups: true
+# List of Kernel Boot parameters to ensure cgroups configuration is on
+raspi_config_cmdline_containers:
+  - "swapaccount=1"
+  - "cgroup_enable=1"
+  - "cgroup_enable=cpuset"
+  - "cgroup_memory=1"
+  - "cgroup_enable=memory"

@@ -1,0 +1,24 @@
+{{ ansible_managed | comment }}
+
+pool 0.{{ raspi_config_ntp_area if raspi_config_ntp_area else '' }}.pool.ntp.org iburst
+pool 1.{{ raspi_config_ntp_area if raspi_config_ntp_area else '' }}.pool.ntp.org iburst
+pool 2.{{ raspi_config_ntp_area if raspi_config_ntp_area else '' }}.pool.ntp.org iburst
+pool 3.{{ raspi_config_ntp_area if raspi_config_ntp_area else '' }}.pool.ntp.org iburst
+
+# Always reset the clock, even if the new time is more than 1000s away
+tinker panic 0
+
+# Permit time synchronization with our time source
+# DOES NOT WORK
+#restrict default nomodify notrap nopeer noquery
+#restrict source noquery nopeer
+
+# Permit all access over the loopback interface.
+restrict 127.0.0.1
+restrict ::1
+
+# Note: Monitoring will not be disabled with the limited restriction flag.
+disable monitor
+
+driftfile /var/lib/ntp/ntp.drift
+logfile /var/log/ntp.log
