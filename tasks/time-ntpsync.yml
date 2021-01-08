@@ -8,13 +8,13 @@
     enabled: false
     state: stopped
   when:
-  - raspi_config_ntp_server_enabled | bool
-  - '"systemd-timesyncd.service" in services'
+    - raspi_config_ntp_server_enabled | bool
+    - '"systemd-timesyncd.service" in services'
 
 - name: Ensure NTP package is installed.
   package:
     name: ntp
-    state: latest
+    state: present
 
 - name: Ensure tzdata package is installed (Linux).
   package:

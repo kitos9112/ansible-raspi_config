@@ -1,7 +1,6 @@
 ---
-
 - name: Update RPi hostname
-  hostname: 
+  hostname:
     name: "{{ raspi_config_hostname }}"
 
 - name: Manage /etc/hosts entries applying J2 template
@@ -10,7 +9,7 @@
     dest: /etc/hosts
     owner: root
     group: root
-    mode: '0644'
+    mode: "0644"
 
 - name: Configure static IPv4 addressing
   template:
@@ -18,5 +17,5 @@
     dest: /etc/dhcpcd.conf
     owner: root
     group: netdev
-    mode: '0664'
+    mode: "0664"
   notify: restart networking

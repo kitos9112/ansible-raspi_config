@@ -5,26 +5,27 @@
     dest: /etc/wpa_supplicant/wpa_supplicant.conf
     owner: root
     group: root
-    mode: '0600'
+    mode: "0600"
 
 - name: Set wifi country [RPi OTHERs]
   lineinfile:
-    path: '/etc/wpa_supplicant/wpa_supplicant.conf'
-    regexp: '^country='
-    line: 'country={{ raspi_config_wifi_country }}'
+    path: "/etc/wpa_supplicant/wpa_supplicant.conf"
+    regexp: "^country="
+    line: "country={{ raspi_config_wifi_country }}"
   notify: restart networking
 
 - name: Set WiFi country via `iw` [RPi-3B+ only]
-  shell: "iw reg set {{ raspi_config_wifi_country }}"
+  command: "iw reg set {{ raspi_config_wifi_country }}"
   changed_when: False
   when:
     - inventory_hostname in groups['rpi_3b']
 
 - name: Do not disable wifi, since wifi country is set
   copy:
-    dest: '{{ item }}'
-    content: '0'
+    dest: "{{ item }}"
+    content: "0"
+    mode: 0644
   with_items:
-    - '/var/lib/systemd/rfkill/platform-3f300000.mmcnr:wlan'
-    - '/var/lib/systemd/rfkill/platform-fe300000.mmcnr:wlan'
+    - "/var/lib/systemd/rfkill/platform-3f300000.mmcnr:wlan"
+    - "/var/lib/systemd/rfkill/platform-fe300000.mmcnr:wlan"
   notify: restart networking

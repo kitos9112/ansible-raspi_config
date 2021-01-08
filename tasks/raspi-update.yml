@@ -1,12 +1,13 @@
+---
 - name: install rpi-update
   apt:
-    pkg: 'rpi-update'
-    state: 'present'
+    pkg: "rpi-update"
+    state: "present"
   register: rpi_update_installed
   until: rpi_update_installed is succeeded
 
 - name: update firmware
-  command: 'rpi-update'
+  command: "rpi-update"
   environment:
     - SKIP_BACKUP: 1
     - PRUNE_MODULES: 1
@@ -14,4 +15,3 @@
   changed_when: 'fw_result.rc == 0 and "Your firmware is already up to date" not in fw_result.stdout'
   notify:
     - reboot
-  

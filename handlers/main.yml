@@ -1,10 +1,9 @@
 ---
-
 - name: apply raspi_config
   command: raspi-config --apply-os-config
 
 - name: reboot
-  shell: "reboot -h now"
+  command: "reboot -h now"
   async: 1
   poll: 0
   notify:
