@@ -1,14 +1,12 @@
 ---
-
 galaxy_info:
-  author: Mikołaj Koziarkiewicz
+  author: Marcos Soutullo
   description: Sets up basic configuration for a headless Raspberry Pi Raspbian server.
-  company: mikołak
-  license: BSD
-  min_ansible_version: 2.8
+  company: kitos9112
+  license: MIT
+  min_ansible_version: 2.9
   platforms:
     - name: Raspbian
   galaxy_tags:
     - development
     - system
-

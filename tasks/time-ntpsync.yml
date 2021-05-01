@@ -36,4 +36,5 @@
     mode: 0644
   notify: restart ntp
 
-- meta: flush_handlers
+- name: Flush all Handlers
+  meta: flush_handlers

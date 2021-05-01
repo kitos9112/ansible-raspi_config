@@ -16,7 +16,7 @@
 
 - name: Set WiFi country via `iw` [RPi-3B+ only]
   command: "iw reg set {{ raspi_config_wifi_country }}"
-  changed_when: False
+  changed_when: false
   when:
     - inventory_hostname in groups['rpi_3b']
 

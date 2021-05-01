@@ -40,13 +40,13 @@ All user variables reside in `defaults/main.yml`. Currently the following are av
  
 ```yaml
 # perform full update+upgrade
-raspi_config_update_packages: yes
+raspi_config_update_packages: true
 # have the FS fill the SD card
-raspi_config_expanded_filesystem: yes
+raspi_config_expanded_filesystem: true
 # how much memory should be owned by the GPU (vs RAM)
 raspi_config_memory_split_gpu: 16
 #currently sets Pi2 OC setting if applicable
-raspi_config_ensure_optimal_cpu_params: yes
+raspi_config_ensure_optimal_cpu_params: true
 # set global locale
 raspi_config_locale: en_US.UTF-8
 # set timezone
@@ -56,10 +56,10 @@ raspi_config_timezone_dependent_services: []
 # set hostname
 raspi_config_hostname: pi
 # ensure camera support is on - CURRENTLY UNVERIFIED
-raspi_config_enable_camera: no
+raspi_config_enable_camera: false
 # specify whether to fail deployment when user/password is default
 # ignored if "raspi_config_replace_user" is set (warning will still display)
-raspi_config_fail_on_auth_test: yes
+raspi_config_fail_on_auth_test: true
 # user to replace the default "pi" user with
 # NOTE: if you use this for the first time as "pi", any post_tasks will fail!
 raspi_config_replace_user:

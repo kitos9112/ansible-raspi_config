@@ -4,7 +4,7 @@
 - name: Update, Upggrade and autoclean all packages
   apt:
     update_cache: true
-    autoclean: yes
+    autoclean: true
     upgrade: full
   changed_when: false
   when: raspi_config_update_packages |bool
@@ -34,7 +34,7 @@
 - name: Get network names status
   command: "raspi-config nonint get_net_names"
   register: pi_netnames
-  changed_when: False
+  changed_when: false
 
 - name: Enable network names
   command: "raspi-config nonint do_net_names 0"
