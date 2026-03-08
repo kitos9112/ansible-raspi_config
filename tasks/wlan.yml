@@ -1,6 +1,6 @@
 ---
 - name: Manage /etc/wpa_supplicant/wpa_supplicant.conf configuration applying J2 template
-  template:
+  ansible.builtin.template:
     src: wpa_supplicant.conf.j2
     dest: /etc/wpa_supplicant/wpa_supplicant.conf
     owner: root
@@ -8,24 +8,24 @@
     mode: "0600"
 
 - name: Set wifi country [RPi OTHERs]
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: "/etc/wpa_supplicant/wpa_supplicant.conf"
     regexp: "^country="
     line: "country={{ raspi_config_wifi_country }}"
   notify: restart networking
 
 - name: Set WiFi country via `iw` [RPi-3B+ only]
-  command: "iw reg set {{ raspi_config_wifi_country }}"
+  ansible.builtin.command: "iw reg set {{ raspi_config_wifi_country }}"
   changed_when: false
   when:
-    - inventory_hostname in groups['rpi_3b']
+    - inventory_hostname in groups.get('rpi_3b', [])
 
 - name: Do not disable wifi, since wifi country is set
-  copy:
+  ansible.builtin.copy:
     dest: "{{ item }}"
     content: "0"
-    mode: 0644
-  with_items:
+    mode: "0644"
+  loop:
     - "/var/lib/systemd/rfkill/platform-3f300000.mmcnr:wlan"
     - "/var/lib/systemd/rfkill/platform-fe300000.mmcnr:wlan"
   notify: restart networking

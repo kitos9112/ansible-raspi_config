@@ -1,31 +1,31 @@
 ---
 - name: Populate service facts
-  service_facts:
+  ansible.builtin.service_facts:
 
 - name: Ensure NTP package is installed.
-  package:
-    name: ntp
+  ansible.builtin.package:
+    name: systemd-timesyncd
     state: present
 
 - name: Ensure tzdata package is installed (Linux).
-  package:
+  ansible.builtin.package:
     name: tzdata
     state: present
-  when: ansible_system == "Linux"
+  when: ansible_facts["system"] == "Linux"
 
-- name: Ensure NTP is running and enabled as configured.
-  service:
-    name: ntp
-    state: started
-    enabled: true
-  when: raspi_config_ntp_server_enabled | bool
+# - name: Ensure NTP is running and enabled as configured.
+#   service:
+#     name: ntp
+#     state: started
+#     enabled: true
+#   when: raspi_config_ntp_server_enabled | bool
 
-- name: Generate ntp configuration file
-  template:
-    src: ntp.conf.j2
-    dest: /etc/ntp.conf
-    mode: 0644
-  notify: restart ntp
+# - name: Generate ntp configuration file
+#   template:
+#     src: ntp.conf.j2
+#     dest: /etc/ntp.conf
+#     mode: 0644
+#   notify: restart ntp
 
 - name: Flush all Handlers
-  meta: flush_handlers
+  ansible.builtin.meta: flush_handlers

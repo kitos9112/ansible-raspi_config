@@ -1,43 +1,39 @@
 ---
 - name: apply raspi_config
-  command: raspi-config --apply-os-config
+  ansible.builtin.command: raspi-config --apply-os-config
+  changed_when: false
 
 - name: reboot
-  command: "reboot -h now"
-  async: 1
-  poll: 0
-  notify:
-    - wait for reboot
-
-- name: wait for reboot
-  wait_for_connection:
-    delay: "{{ raspi_config_reboot_min_time }}"
-    timeout: "{{ raspi_config_reboot_max_wait_time }}"
+  ansible.builtin.reboot:
+    reboot_timeout: "{{ raspi_config_reboot_max_wait_time }}"
+    post_reboot_delay: "{{ raspi_config_reboot_min_time }}"
 
 - name: remove default user
-  when: "raspi_config_replace_user['name'] != raspi_config_auth_test_username"
-  user: name={{ raspi_config_auth_test_username }} state=absent force=yes
-  async: 0
-  poll: 0
+  ansible.builtin.user:
+    name: "{{ raspi_config_auth_test_username }}"
+    state: absent
+    force: true
+  when: raspi_config_replace_user['name'] != raspi_config_auth_test_username
   ignore_errors: true
 
 - name: restart timezone dependent services
-  service:
+  ansible.builtin.service:
     name: "{{ item }}"
     state: restarted
-  with_items: "{{ raspi_config_timezone_dependent_services }}"
+  loop: "{{ raspi_config_timezone_dependent_services }}"
 
 - name: Restart timesyncd service
-  service:
+  ansible.builtin.service:
     name: systemd-timesyncd
     state: restarted
 
 - name: restart networking
-  systemd:
+  ansible.builtin.systemd:
     name: networking
     state: restarted
+  ignore_errors: true
 
 - name: restart ntp
-  systemd:
+  ansible.builtin.systemd:
     name: ntp
     state: restarted

@@ -1,11 +1,11 @@
 ---
 - name: ensure utility present
-  apt:
+  ansible.builtin.apt:
     name: sshpass
     state: present
 
 - name: check for login
-  command: |
+  ansible.builtin.command: |
     sshpass -p {{ raspi_config_auth_test_password }} ssh {{ raspi_config_auth_test_username }}@localhost \
             -o NoHostAuthenticationForLocalhost=yes "echo {{ raspi_config_auth_test_string }}"
   register: auth_test
@@ -13,14 +13,18 @@
   failed_when: false
 
 - name: optional warning
-  debug:
+  ansible.builtin.debug:
     msg: "{{ raspi_config_auth_test_fail_msg }}"
-  when: "raspi_config_auth_test_string == auth_test.stdout"
+  when: raspi_config_auth_test_string == auth_test.stdout
   # for highlighting purposes
-  changed_when: "raspi_config_auth_test_string == auth_test.stdout"
-  failed_when: "raspi_config_fail_on_auth_test and raspi_config_replace_user['name'] != None"
+  changed_when: raspi_config_auth_test_string == auth_test.stdout
+  failed_when:
+    - raspi_config_fail_on_auth_test
+    - raspi_config_replace_user['name'] is not none
 
 - name: additional info
-  debug:
+  ansible.builtin.debug:
     msg: "{{ raspi_config_auth_test_replace_info }}"
-  when: "raspi_config_auth_test_string == auth_test.stdout and raspi_config_replace_user['name'] != None"
+  when:
+    - raspi_config_auth_test_string == auth_test.stdout
+    - raspi_config_replace_user['name'] is not none

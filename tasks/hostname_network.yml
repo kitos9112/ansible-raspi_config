@@ -1,10 +1,10 @@
 ---
 - name: Update RPi hostname
-  hostname:
+  ansible.builtin.hostname:
     name: "{{ raspi_config_hostname }}"
 
 - name: Manage /etc/hosts entries applying J2 template
-  template:
+  ansible.builtin.template:
     src: hosts.j2
     dest: /etc/hosts
     owner: root
@@ -12,7 +12,7 @@
     mode: "0644"
 
 - name: Configure static IPv4 addressing
-  template:
+  ansible.builtin.template:
     src: dhcpcd.conf.j2
     dest: /etc/dhcpcd.conf
     owner: root

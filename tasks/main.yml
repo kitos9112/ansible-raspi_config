@@ -1,25 +1,30 @@
 ---
-- import_tasks: time-ntpsync.yml
+- ansible.builtin.import_tasks: time-ntpsync.yml
 
-- name: Update, Upggrade and autoclean all packages
-  apt:
+- name: Update, upgrade, and autoclean all packages
+  ansible.builtin.apt:
     update_cache: true
     autoclean: true
     upgrade: full
   changed_when: false
-  when: raspi_config_update_packages |bool
+  when: raspi_config_update_packages | bool
 
-- import_tasks: hostname_network.yml
+- ansible.builtin.import_tasks: hostname_network.yml
 
-- name: sets the timezone
-  timezone:
-    name: "{{ raspi_config_timezone }}"
+- name: Get current timezone
+  ansible.builtin.command: timedatectl show -p Timezone --value
+  register: raspi_config_current_timezone
+  changed_when: false
+
+- name: Set timezone
+  ansible.builtin.command: "timedatectl set-timezone {{ raspi_config_timezone }}"
+  when: raspi_config_current_timezone.stdout != raspi_config_timezone
   notify: restart timezone dependent services
 
-- import_tasks: setup_replace_user.yml
-  when: raspi_config_replace_user['name'] != None
+- ansible.builtin.import_tasks: setup_replace_user.yml
+  when: raspi_config_replace_user['name'] is not none
 
-- import_tasks: security_check.yml
+- ansible.builtin.import_tasks: security_check.yml
 
 - name: ensure filesystem is resized
   expand_fs:
@@ -27,17 +32,20 @@
   register: expand_fs_output
 
 - name: filesystem expand non-action check
-  debug:
+  ansible.builtin.debug:
     msg: "{{ expand_fs_output.stderr }}"
-  when: "raspi_config_expanded_filesystem and expand_fs_output.stderr.startswith('WARN')"
+  when:
+    - raspi_config_expanded_filesystem
+    - expand_fs_output.stderr is defined
+    - expand_fs_output.stderr.startswith('WARN')
 
 - name: Get network names status
-  command: "raspi-config nonint get_net_names"
+  ansible.builtin.command: "raspi-config nonint get_net_names"
   register: pi_netnames
   changed_when: false
 
 - name: Enable network names
-  command: "raspi-config nonint do_net_names 0"
+  ansible.builtin.command: "raspi-config nonint do_net_names 0"
   when: pi_netnames.stdout != '0'
   notify:
     - apply raspi_config
@@ -51,7 +59,7 @@
     - reboot
 
 - name: Enable shutdown/startup hardware button
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: "/boot/config.txt"
     line: "dtoverlay=gpio-shutdown"
     insertafter: "^# Additional overlays and parameters"
@@ -59,16 +67,15 @@
     - reboot
 
 - name: Configure WLAN settings in wpa_supplicant.conf
-  include_tasks: wlan.yml
+  ansible.builtin.include_tasks: wlan.yml
 
 - name: set additional config vars
   pi_boot_config:
-  args:
     config_vals: "{{ raspi_config_other_options }}"
   notify:
     - apply raspi_config
     - reboot
 
 - name: Configure special needs for Containers
-  include_tasks: containers.yml
-  when: raspi_config_enable_cgroups |bool
+  ansible.builtin.include_tasks: containers.yml
+  when: raspi_config_enable_cgroups | bool
